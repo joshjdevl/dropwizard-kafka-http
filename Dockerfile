@@ -27,3 +27,6 @@ ENV PATH /opt/apache-maven-$MAVEN_VERSION/bin:$PATH
 
 RUN cd /tmp && git clone https://github.com/joshjdevl/dropwizard-kafka-http
 RUN cd /tmp/dropwizard-kafka-http && mvn clean install && mvn package
+
+ADD run.sh /tmp/run.sh
+RUN chmod 755 /tmp/run.sh
