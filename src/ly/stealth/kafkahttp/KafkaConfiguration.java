@@ -30,6 +30,7 @@ public class KafkaConfiguration extends Configuration {
         public String zookeeperConnect;
         public String groupId;
         public int consumerTimeoutMs;
+        public boolean enable=true;
 
         public Properties asProperties(Integer timeoutMs) {
             Properties p = new Properties();
@@ -38,6 +39,7 @@ public class KafkaConfiguration extends Configuration {
             p.put("group.id", groupId);
             p.put("auto.offset.reset", OffsetRequest.SmallestTimeString());
             p.put("consumer.timeout.ms", "" + (timeoutMs != null ? timeoutMs : consumerTimeoutMs));
+            p.put("consumer.enable",enable);
 
             return p;
         }

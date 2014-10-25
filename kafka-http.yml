@@ -1,3 +1,4 @@
+#http://stackoverflow.com/questions/20028451/change-dropwizard-default-ports
 producer:
   metadataBrokerList: "kafka:9092"
   serializerClass: "kafka.serializer.StringEncoder"
@@ -8,3 +9,6 @@ consumer:
   groupId: "group"
   consumerTimeoutMs: 500
 
+http:
+  port: 17273
+  adminPort: 17274
