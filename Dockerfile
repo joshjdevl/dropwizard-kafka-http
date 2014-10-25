@@ -26,4 +26,4 @@ RUN tar xfz /tmp/apache-maven-$MAVEN_VERSION-bin.tar.gz -C /opt
 ENV PATH /opt/apache-maven-$MAVEN_VERSION/bin:$PATH
 
 RUN cd /tmp && git clone https://github.com/joshjdevl/dropwizard-kafka-http
-RUN cd /tmp/dropwizard-kafka-http && mvn clean install
+RUN cd /tmp/dropwizard-kafka-http && mvn clean install && mvn package
