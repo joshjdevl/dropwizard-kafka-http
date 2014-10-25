@@ -1,1 +1,1 @@
-docker build -t joshjdevl/docker-dropwizard-kafka-http .
+docker build -t joshjdevl/dropwizard-kafka-http .

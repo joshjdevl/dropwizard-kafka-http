@@ -1,10 +1,10 @@
 producer:
-  metadataBrokerList: "192.168.22.10:9092"
+  metadataBrokerList: "kafka:9092"
   serializerClass: "kafka.serializer.StringEncoder"
   producerType: "sync"
 
 consumer:
-  zookeeperConnect: "192.168.22.5:2181"
+  zookeeperConnect: "zk:2181"
   groupId: "group"
   consumerTimeoutMs: 500
 
