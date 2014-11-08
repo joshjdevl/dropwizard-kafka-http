@@ -1,0 +1,23 @@
+zookeeper:
+  image: jplock/zookeeper:latest
+  ports:
+    - "2181"
+kafka:
+  image: wurstmeister/kafka:latest
+  ports:
+    - "9092"
+  links:
+    - zookeeper:zk
+  environment:
+    KAFKA_ADVERTISED_HOST_NAME: 
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+kafkarest:
+  image: joshjdevl/dropwizard-kafka-http:latest
+  ports:
+    - "17273:17273"
+    - "17274:17274"
+  links:
+    - zookeeper:zk
+    - kafka
+  command: java -jar /tmp/dropwizard-kafka-http/target/dropwizard-kafka-http-0.0.1-SNAPSHOT.jar server /tmp/dropwizard-kafka-http/kafka-http.yml
