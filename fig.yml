@@ -1,0 +1,5 @@
+web:
+  image: joshjdevl/kafka-http:latest
+  ports:
+    - "9998:8080"
+    - "9999:8081"

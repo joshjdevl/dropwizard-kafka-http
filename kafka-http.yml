@@ -1,10 +1,10 @@
 producer:
-  "bootstrap.servers": "192.168.22.10:9092"
+  "bootstrap.servers": "127.0.0.1:9092"
   "key.serializer": "org.apache.kafka.common.serialization.ByteArraySerializer"
   "value.serializer": "org.apache.kafka.common.serialization.ByteArraySerializer"
 
 consumer:
-  "zookeeper.connect": "192.168.22.5:2181"
+  "zookeeper.connect": "127.0.0.1:2181"
   "group.id": "group"
   "auto.offset.reset": "smallest"
   "consumer.timeout.ms": "500"

@@ -28,4 +28,19 @@ ENV PATH /opt/apache-maven-$MAVEN_VERSION/bin:$PATH
 RUN cd /tmp && git clone https://github.com/joshjdevl/dropwizard-kafka-http
 RUN cd /tmp/dropwizard-kafka-http && mvn clean install && mvn package
 
-CMD cd /tmp/dropwizard-kafka-http && java -jar target/dropwizard-kafka-http-0.0.1-SNAPSHOT.jar server kafka-http.yml
+#CMD cd /tmp/dropwizard-kafka-http && java -jar target/dropwizard-kafka-http-0.0.1-SNAPSHOT.jar server kafka-http.yml
+
+ADD kafka-http.yml /tmp/dropwizard-kafka-http/kafka-http.yml
+
+ADD http://apache.mirrors.hoobly.com/kafka/0.8.2.1/kafka_2.10-0.8.2.1.tgz /tmp/kafka
+RUN tar -xvf /tmp/kafka
+
+RUN apt-get -y install supervisor
+
+ADD kafkarest.conf /etc/supervisor/conf.d/kafkarest.conf
+ADD zookeeper.conf /etc/supervisor/conf.d/zookeeper.conf
+ADD kafka.conf /etc/supervisor/conf.d/kafka.conf
+
+CMD /usr/bin/supervisord && tail -f /dev/null
+
+EXPOSE 8080 8081
