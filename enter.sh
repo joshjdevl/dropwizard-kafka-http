@@ -1,1 +1,1 @@
-docker exec -it dropwizardkafkahttp_web_1 /bin/bash
+docker exec -it dropwizardkafkahttp_kafkarest_1 /bin/bash

@@ -5,14 +5,14 @@ RUN apt-get update && apt-get -y install python-software-properties software-pro
 RUN add-apt-repository "deb http://gb.archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
 RUN apt-get update
 
-RUN add-apt-repository ppa:saiarcot895/myppa
+RUN add-apt-repository -y ppa:saiarcot895/myppa
 RUN apt-get update
 RUN apt-get -y install apt-fast
 
 RUN apt-fast -y install git
 
 RUN add-apt-repository ppa:webupd8team/java
-RUN apt-get update
+RUN apt-fast update
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | \
     /usr/bin/debconf-set-selections
 RUN apt-fast install -y oracle-java8-installer
@@ -25,22 +25,27 @@ RUN tar xfz /tmp/apache-maven-$MAVEN_VERSION-bin.tar.gz -C /opt
 
 ENV PATH /opt/apache-maven-$MAVEN_VERSION/bin:$PATH
 
-RUN cd /tmp && git clone https://github.com/joshjdevl/dropwizard-kafka-http
-RUN cd /tmp/dropwizard-kafka-http && mvn clean install && mvn package
+ADD src /tmp/dropwizard-kafka/src
+ADD pom.xml /tmp/dropwizard-kafka/pom.xml
+RUN cd /tmp/dropwizard-kafka && mvn clean install && mvn package -PalternateBuildDir
 
-#CMD cd /tmp/dropwizard-kafka-http && java -jar target/dropwizard-kafka-http-0.0.1-SNAPSHOT.jar server kafka-http.yml
+ADD kafka-http.yml /etc/dropwizard-kafka/kafka-http.yml
 
-ADD kafka-http.yml /tmp/dropwizard-kafka-http/kafka-http.yml
+ENV KAFKA_VERSION 0.8.2.2
+ENV SCALA_VERSION 2.11
+ADD http://apache.mirrors.hoobly.com/kafka/$KAFKA_VERSION/kafka_$SCALA_VERSION-$KAFKA_VERSION.tgz /tmp/kafka/kafka.tgz
+RUN tar xfz /tmp/kafka/kafka.tgz -C /opt
 
-ADD http://apache.mirrors.hoobly.com/kafka/0.8.2.1/kafka_2.10-0.8.2.1.tgz /tmp/kafka
-RUN tar -xvf /tmp/kafka
+RUN apt-fast -y install supervisor
 
-RUN apt-get -y install supervisor
-
-ADD kafkarest.conf /etc/supervisor/conf.d/kafkarest.conf
-ADD zookeeper.conf /etc/supervisor/conf.d/zookeeper.conf
-ADD kafka.conf /etc/supervisor/conf.d/kafka.conf
+ADD kafkadropwizard-supervisor.conf /etc/supervisor/conf.d/kafkadropwizard.conf
+ADD zookeeper-supervisor.conf /etc/supervisor/conf.d/zookeeper.conf
+ADD kafka-supervisor.conf /etc/supervisor/conf.d/kafka.conf
 
 CMD /usr/bin/supervisord && tail -f /dev/null
+
+RUN ln -s /opt/kafka_$SCALA_VERSION-$KAFKA_VERSION /opt/kafka
+
+RUN apt-fast -y install curl
 
 EXPOSE 8080 8081

@@ -95,4 +95,14 @@
             </plugin>
         </plugins>
     </build>
+
+<profiles>
+    <profile>
+        <id>alternateBuildDir</id>
+        <build>
+            <directory>/opt/dropwizard-kafka</directory>
+            <finalName>dropwizard-kafka</finalName>
+        </build>
+    </profile>
+</profiles>
 </project>
