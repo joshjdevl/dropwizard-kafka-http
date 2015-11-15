@@ -60,6 +60,7 @@ public class MessageResource {
     @GET
     @Timed
     public Response consume(
+            @QueryParam("consumergroupid") String consumergroupid,
             @QueryParam("topic") String topic,
             @QueryParam("timeout") Integer timeout
     ) {
@@ -68,8 +69,13 @@ public class MessageResource {
                     .entity(new String[]{"Undefined topic"})
                     .build();
 
+        if (Strings.isNullOrEmpty(consumergroupid)) {
+            consumergroupid="dropwizardkafkaconsumergroupid";
+        }
+
         Properties props = (Properties) consumerCfg.clone();
         if (timeout != null) props.put("consumer.timeout.ms", "" + timeout);
+        props.put("group.id",consumergroupid);
 
         ConsumerConfig config = new ConsumerConfig(props);
         ConsumerConnector connector = Consumer.createJavaConsumerConnector(config);
