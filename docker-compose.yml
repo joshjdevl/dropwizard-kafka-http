@@ -1,2 +1,6 @@
 kafkarest:
-    build: .
+  #build: .
+  image: joshjdevl/dropwizard-kafka-http
+  ports:
+    - "17273:8080"
+    - "8081:8081"
